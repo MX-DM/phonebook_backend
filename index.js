@@ -1,10 +1,12 @@
 const express = require('express')
 var morgan = require('morgan')
+const cors = require('cors')
 
 const app = express()
 
 app.use(express.json())
 app.use(morgan('tiny'))
+app.use(cors())
 
 morgan.token('req-body', (req) => {
     if (req.method === 'POST') {
@@ -41,7 +43,7 @@ let persons = [
 ]
 
 const getId = () => {
-    return Math.floor(Math.random() * (1000000 - 1 + 1)) + 1
+    return String(Math.floor(Math.random() * (1000000 - 1 + 1)) + 1)
 }
 
 app.get('/', (req, res) => {
@@ -109,7 +111,21 @@ app.post('/api/persons', (req, res) => {
 
 })
 
-const PORT = 3001
+app.put('/api/persons/:id', (req, res) => {
+    const id = Number(req.params.id)
+    const updatedPerson = req.body
+  
+    const findPersonIndex = persons.findIndex(person => person.id === id)
+  
+    if (findPersonIndex !== -1) {
+      persons[findPersonIndex] = { id: id, ...updatedPerson }
+      res.json(updatedPerson)
+    } else {
+      res.status(404).json({ error: 'Person not found' })
+    }
+  })
+
+const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`)
 })
