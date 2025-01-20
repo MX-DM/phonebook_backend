@@ -20,12 +20,12 @@ const personSchema = new mongoose.Schema({
     },
     number: {
         type: String,
-        minLength: 8,
+        minLength: [5, 'Number must be at least 8 digits long!'],
         validate: {
             validator:(value) => {
                 return /^\d{2,3}-\d*$/.test(value)
             },
-            message: (props) => `${props.value} is not a valid number!`
+            message: (props) => `${props.value} is not a valid number! ( (2 to 3 digits)-(Unlimited digits) )`
         }
     },
 })
