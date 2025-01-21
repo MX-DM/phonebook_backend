@@ -20,7 +20,7 @@ const personSchema = new mongoose.Schema({
   },
   number: {
     type: String,
-    minLength: [5, 'Number must be at least 8 digits long!'],
+    minLength: [9, 'Number must be at least 8 digits long!'],
     validate: {
       validator:(value) => {
         return /^\d{2,3}-\d*$/.test(value)
